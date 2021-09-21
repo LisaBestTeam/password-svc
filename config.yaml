@@ -1,0 +1,11 @@
+database:
+  endpoint: postgres://{user}:{password}@{host}:{port}/{database}
+
+log:
+  level: info
+
+horizon:
+  endpoint: http://horizon
+
+net:
+  addr: :80
