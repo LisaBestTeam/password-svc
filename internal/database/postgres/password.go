@@ -30,7 +30,7 @@ type passwords struct {
 
 func (p passwords) New() database.Passwords {
 	return &passwords{
-		sql: sq.Select("*").From(passwordTable).PlaceholderFormat(sq.Dollar),
+		sql: sq.Select("*").From(passwordTable).PlaceholderFormat(sq.Dollar).Offset(10).Limit(10),
 		ins: sq.Insert(passwordTable).PlaceholderFormat(sq.Dollar),
 		db:  p.db,
 	}

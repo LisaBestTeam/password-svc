@@ -2,6 +2,5 @@ package handler
 
 import "net/http"
 
-func (h handler) GetPasswordSender(w http.ResponseWriter, r *http.Request) {
-
+func (p PasswordHandler) GetPasswordSender(w http.ResponseWriter, r *http.Request) {
 }

@@ -9,16 +9,16 @@ import (
 func (r router) NewRouter() chi.Router {
 	router := chi.NewRouter()
 
-	newHandler := handler.NewHandler()
-
 	router.Use(
 		middleware.Logger,
 		middleware.Recoverer,
-		)
+	)
+
+	password := handler.NewPasswordHandler(r.passwords, r.log)
 
 	router.Route("/integrations/password", func(r chi.Router) {
-		r.Get("/receiver/{address}", newHandler.GetPasswordReceiver)
-		r.Get("/sender/{address}", newHandler.GetPasswordSender)
+		r.Get("/receiver/{address}", password.GetPasswordReceiver)
+		r.Get("/sender/{address}", password.GetPasswordSender)
 	})
 
 	return router

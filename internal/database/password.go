@@ -1,6 +1,8 @@
 package database
 
 type Passwords interface {
+	New() Passwords
+
 	SelectBySender(address string) ([]Password, error)
 	SelectByReceiver(address string) ([]Password, error)
 
