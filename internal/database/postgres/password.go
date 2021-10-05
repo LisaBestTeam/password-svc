@@ -30,14 +30,14 @@ type passwords struct {
 
 func (p passwords) New() database.Passwords {
 	return &passwords{
-		sql: sq.Select("*").From(passwordTable).PlaceholderFormat(sq.Dollar).Offset(10).Limit(10),
+		sql: sq.Select("*").From(passwordTable).PlaceholderFormat(sq.Dollar),
 		ins: sq.Insert(passwordTable).PlaceholderFormat(sq.Dollar),
 		db:  p.db,
 	}
 }
 
-func (p passwords) SelectBySender(address string) ([]database.Password, error) {
-	var passwordList []database.Password
+func (p passwords) SelectBySender(address string) ([]*database.Password, error) {
+	passwordList := make([]*database.Password, 0)
 
 	query, args := p.sql.Where(sq.Eq{senderAddressColumn: address}).MustSql()
 	err := p.db.Select(&passwordList, query, args...)
@@ -45,8 +45,8 @@ func (p passwords) SelectBySender(address string) ([]database.Password, error) {
 	return passwordList, err
 }
 
-func (p passwords) SelectByReceiver(address string) ([]database.Password, error) {
-	var passwordList []database.Password
+func (p passwords) SelectByReceiver(address string) ([]*database.Password, error) {
+	var passwordList []*database.Password
 
 	query, args := p.sql.Where(sq.Eq{receiverAddressColumn: address}).MustSql()
 	err := p.db.Select(&passwordList, query, args...)
@@ -69,9 +69,13 @@ func (p passwords) CreatePassword(password database.Password) error {
 func (p passwords) MaxId() (uint64, error) {
 	query, args := sq.Select("max(id)").From(passwordTable).PlaceholderFormat(sq.Dollar).MustSql()
 
-	var result uint64
+	var result *uint64
 	err := p.db.Get(&result, query, args...)
 
-	return result, err
+	return *result, err
 }
 
+func (p passwords) Pagination(pagination database.Pagination) database.Passwords {
+	p.sql = p.sql.Offset(pagination.Page * pagination.Limit).Limit(pagination.Limit)
+	return p
+}

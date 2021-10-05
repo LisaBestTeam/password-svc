@@ -8,7 +8,10 @@ require (
 	github.com/alecthomas/units v0.0.0-20210912230133-d1bdfacee922 // indirect
 	github.com/fatih/structs v1.1.0
 	github.com/go-chi/chi/v5 v5.0.4
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/gobuffalo/packr/v2 v2.8.1
+	github.com/google/jsonapi v1.0.0
+	github.com/gorilla/schema v1.2.0
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/lib/pq v1.10.0
 	github.com/pkg/errors v0.8.1

@@ -8,17 +8,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type Ingest interface {
-	service.Service
-}
-
 type ingest struct {
 	log     *logrus.Logger
 	channel <-chan database.Password
 	db      database.Passwords
 }
 
-func NewIngest(cfg config.Config, channel <-chan database.Password) Ingest {
+func NewIngest(cfg config.Config, channel <-chan database.Password) service.Service {
 	return &ingest{
 		log:     cfg.Log(),
 		db:      postgres.NewPassword(cfg.Database()),

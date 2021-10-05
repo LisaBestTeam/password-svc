@@ -13,15 +13,23 @@ import (
 
 func (l listen) Run(ctx context.Context, group *sync.WaitGroup) {
 	defer group.Done()
+	defer close(l.channel)
+
 	log := l.log.WithField("service", "listener")
 
 	log.Info("run listener")
 
 	ticker := time.NewTicker(5 * time.Second)
 
-	links := value{
-		Type: srtprt("1"),
+	maxId, err := l.passwords.MaxId()
+	if err != nil {
+		l.log.WithError(err).Error("failed to get max id")
+		return
+	}
 
+	links := value{
+		Type:   strprt("1"),
+		Cursor: &maxId,
 	}.Encode()
 
 	for ; ; <-ticker.C {
@@ -52,7 +60,7 @@ func (l listen) Run(ctx context.Context, group *sync.WaitGroup) {
 
 }
 
-func srtprt(string2 string) *string {
+func strprt(string2 string) *string {
 	return &string2
 }
 
@@ -61,6 +69,7 @@ type value struct {
 	Limit  *int
 	Number *int
 	Type   *string
+	Cursor *uint64
 }
 
 func (v value) Encode() string {
@@ -80,6 +89,10 @@ func (v value) Encode() string {
 
 	if v.Type != nil {
 		values.Add("filter[type]", cast.ToString(v.Type))
+	}
+
+	if v.Cursor != nil {
+		values.Add("page[cursor]", cast.ToString(v.Cursor))
 	}
 
 	return values.Encode()

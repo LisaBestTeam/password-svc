@@ -9,10 +9,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type Listen interface {
-	service.Service
-}
-
 type listen struct {
 	passwords database.Passwords
 	client    horizon.HorizonClient
@@ -20,7 +16,7 @@ type listen struct {
 	channel   chan<- database.Password
 }
 
-func NewListen(cfg config.Config, channel chan<- database.Password) Listen {
+func NewListen(cfg config.Config, channel chan<- database.Password) service.Service {
 	return &listen{
 		passwords: postgres.NewPassword(cfg.Database()),
 		client:    cfg.Horizon(),

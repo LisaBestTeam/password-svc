@@ -15,4 +15,6 @@ func Runner(ctx context.Context, services ...Service) {
 		group.Add(1)
 		go service.Run(ctx, group)
 	}
+
+	group.Wait()
 }
