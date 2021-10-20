@@ -22,12 +22,14 @@ func (r ReceiverRequest) Validate() error {
 	}.Filter()
 }
 
-func GetPasswordReceiver(r *http.Request) ReceiverRequest {
+func GetPasswordReceiver(r *http.Request) (ReceiverRequest, error) {
 	var request ReceiverRequest
 
-	_ = schema.NewDecoder().Decode(&request, r.URL.Query())
+	if err := schema.NewDecoder().Decode(&request, r.URL.Query()); err != nil {
+		return ReceiverRequest{}, err
+	}
 
 	request.Receiver = chi.URLParam(r, "receiver")
 
-	return request
+	return request, request.Validate()
 }

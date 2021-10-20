@@ -24,4 +24,5 @@ type Password struct {
 	SenderAddress    string `db:"sender_address" structs:"sender_address" jsonapi:"attr,sender_address"`
 	ReceiverAddress  string `db:"receiver_address" structs:"receiver_address" jsonapi:"attr,receiver_address"`
 	EncryptsPassword string `db:"encrypts_password" structs:"encrypts_password" jsonapi:"attr,encrypts_password"`
+	TypeOfFile       string `db:"type_of_file" structs:"type_of_file" jsonapi:"attr,type_of_file"`
 }

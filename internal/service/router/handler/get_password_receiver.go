@@ -11,9 +11,14 @@ import (
 func (p PasswordHandler) GetPasswordReceiver(w http.ResponseWriter, r *http.Request) {
 	log := p.log.WithField("handler", "receiver")
 
-	requestReceiver := request.GetPasswordReceiver(r)
+	requestReceiver, err := request.GetPasswordReceiver(r)
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-	if err := requestReceiver.Validate(); err != nil {
+	if err = requestReceiver.Validate(); err != nil {
 		json.NewEncoder(w).Encode(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -29,6 +34,5 @@ func (p PasswordHandler) GetPasswordReceiver(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 	jsonapi.MarshalPayload(w, passwords)
 }

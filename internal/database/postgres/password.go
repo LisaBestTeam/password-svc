@@ -10,8 +10,8 @@ import (
 
 const (
 	passwordTable         = "password"
-	senderAddressColumn   = "sender"
-	receiverAddressColumn = "receiver"
+	senderAddressColumn   = "sender_address"
+	receiverAddressColumn = "receiver_address"
 )
 
 func NewPassword(db *sqlx.DB) database.Passwords {
