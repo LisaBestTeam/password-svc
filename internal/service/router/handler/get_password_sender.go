@@ -34,5 +34,7 @@ func (p PasswordHandler) GetPasswordSender(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	jsonapi.MarshalPayload(w, passwords)
 }
