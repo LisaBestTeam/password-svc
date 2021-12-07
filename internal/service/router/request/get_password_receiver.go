@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi"
 	"net/http"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -29,7 +29,11 @@ func GetPasswordReceiver(r *http.Request) (ReceiverRequest, error) {
 		return ReceiverRequest{}, err
 	}
 
-	request.Receiver = chi.URLParam(r, "receiver")
+	if request.Limit == 0 {
+		request.Limit = 15
+	}
+
+	request.Receiver = chi.URLParam(r, "address")
 
 	return request, request.Validate()
 }

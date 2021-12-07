@@ -9,7 +9,7 @@ import (
 )
 
 func (p PasswordHandler) GetPasswordSender(w http.ResponseWriter, r *http.Request) {
-	log := p.log.WithField("handler", "receiver")
+	log := p.log.WithField("handler", "sender")
 
 	requestSender, err := request.GetPasswordSender(r)
 	if err != nil {

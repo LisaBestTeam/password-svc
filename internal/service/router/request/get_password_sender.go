@@ -3,7 +3,7 @@ package request
 import (
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/gorilla/schema"
 	"github.com/lisabestteam/password-svc/internal/database"
@@ -29,7 +29,10 @@ func GetPasswordSender(r *http.Request) (SenderRequest, error) {
 		return SenderRequest{}, err
 	}
 
-	request.Sender = chi.URLParam(r, "sender")
+	if request.Limit == 0 {
+		request.Limit = 15
+	}
+	request.Sender = chi.URLParam(r, "address")
 
 	return request, request.Validate()
 }

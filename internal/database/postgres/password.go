@@ -38,7 +38,7 @@ func (p passwords) New() database.Passwords {
 }
 
 func (p passwords) SelectBySender(address string) ([]*database.Password, error) {
-	passwordList := make([]*database.Password, 0)
+	var passwordList []*database.Password
 
 	request := p.sql.Where(sq.Eq{senderAddressColumn: address})
 
