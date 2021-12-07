@@ -19,7 +19,7 @@ type listen struct {
 func NewListen(cfg config.Config, channel chan<- database.Password) service.Service {
 	return &listen{
 		passwords: postgres.NewPassword(cfg.DB()),
-		client:    horizon.NewHorizonClient("http://localhost:8000/_/api"),
+		client:    horizon.NewHorizonClient("http://horizon"),
 		log:       cfg.Log(),
 		channel:   channel,
 	}
