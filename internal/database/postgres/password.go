@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"database/sql"
 	sq "github.com/Masterminds/squirrel"
 	"github.com/fatih/structs"
 	"github.com/jmoiron/sqlx"
@@ -71,6 +72,9 @@ func (p passwords) MaxId() (uint64, error) {
 
 	var result *uint64
 	err := p.db.Get(&result, query, args...)
+	if err == sql.ErrNoRows {
+		return 0, nil
+	}
 
 	return *result, err
 }
