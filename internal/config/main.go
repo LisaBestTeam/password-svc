@@ -1,43 +1,35 @@
 package config
 
 import (
-	"net"
-
-	"github.com/jmoiron/sqlx"
-	"github.com/lisabestteam/password-svc/internal/horizon"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
+	"gitlab.com/distributed_lab/kit/comfig"
+	"gitlab.com/distributed_lab/kit/copus"
+	"gitlab.com/distributed_lab/kit/copus/types"
+	"gitlab.com/distributed_lab/kit/kv"
+	"gitlab.com/distributed_lab/kit/pgdb"
 )
 
 type Config interface {
-	Log() *logrus.Logger
-	Database() *sqlx.DB
-	Horizon() horizon.HorizonClient
-	Listener() net.Listener
+	comfig.Listenerer
+	pgdb.Databaser
+	types.Copuser
+	comfig.Logger
 }
 
 type config struct {
-	log      *logrus.Logger
-	database *sqlx.DB
-	client   horizon.HorizonClient
-	listener net.Listener
+	comfig.Listenerer
+	pgdb.Databaser
+	types.Copuser
+	comfig.Logger
+
+	getter kv.Getter
 }
 
-func NewConfig(getter *viper.Viper) Config {
+func NewConfig(getter kv.Getter) Config {
 	return &config{
-		database: NewDatabase(getter),
-		log:      NewLog(getter),
-		client:   NewHorizon(getter),
-		listener: NetListener(getter),
+		Listenerer: comfig.NewListenerer(getter),
+		Databaser:  pgdb.NewDatabaser(getter),
+		Copuser:    copus.NewCopuser(getter),
+		Logger:     comfig.NewLogger(getter, comfig.LoggerOpts{}),
+		getter:     getter,
 	}
-}
-
-func MustGetter(configPath string) *viper.Viper {
-	getter := viper.New()
-	getter.SetConfigFile(configPath)
-	if err := getter.ReadInConfig(); err != nil {
-		panic(err)
-	}
-
-	return getter
 }

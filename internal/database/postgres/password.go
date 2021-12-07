@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	sq "github.com/Masterminds/squirrel"
 	"github.com/fatih/structs"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 	"github.com/lisabestteam/password-svc/internal/database"
+	"github.com/pkg/errors"
+	"gitlab.com/distributed_lab/kit/pgdb"
 )
 
 const (
@@ -15,7 +15,7 @@ const (
 	receiverAddressColumn = "receiver_address"
 )
 
-func NewPassword(db *sqlx.DB) database.Passwords {
+func NewPassword(db *pgdb.DB) database.Passwords {
 	return &passwords{
 		sql: sq.Select("*").From(passwordTable).PlaceholderFormat(sq.Dollar),
 		ins: sq.Insert(passwordTable).PlaceholderFormat(sq.Dollar),
@@ -26,12 +26,12 @@ func NewPassword(db *sqlx.DB) database.Passwords {
 type passwords struct {
 	sql sq.SelectBuilder
 	ins sq.InsertBuilder
-	db  *sqlx.DB
+	db  *pgdb.DB
 }
 
 func (p passwords) New() database.Passwords {
 	return &passwords{
-		sql: sq.Select("*").From(passwordTable).PlaceholderFormat(sq.Dollar),
+		sql: sq.Select("*").From(passwordTable),
 		ins: sq.Insert(passwordTable).PlaceholderFormat(sq.Dollar),
 		db:  p.db,
 	}
@@ -40,43 +40,40 @@ func (p passwords) New() database.Passwords {
 func (p passwords) SelectBySender(address string) ([]*database.Password, error) {
 	passwordList := make([]*database.Password, 0)
 
-	query, args := p.sql.Where(sq.Eq{senderAddressColumn: address}).MustSql()
-	err := p.db.Select(&passwordList, query, args...)
+	request := p.sql.Where(sq.Eq{senderAddressColumn: address})
 
-	return passwordList, err
+	err := p.db.Select(&passwordList, request)
+	return passwordList, errors.Wrap(err, "failed to select from tests")
 }
 
 func (p passwords) SelectByReceiver(address string) ([]*database.Password, error) {
 	var passwordList []*database.Password
 
-	query, args := p.sql.Where(sq.Eq{receiverAddressColumn: address}).MustSql()
-	err := p.db.Select(&passwordList, query, args...)
+	request := p.sql.Where(sq.Eq{receiverAddressColumn: address})
 
-	return passwordList, err
+	err := p.db.Select(&passwordList, request)
+	return passwordList, errors.Wrap(err, "failed to select from tests")
 }
 
 func (p passwords) CreatePassword(password database.Password) error {
 	clauses := structs.Map(password)
-	query, args, err := p.ins.SetMap(clauses).ToSql()
-	if err != nil {
-		return err
-	}
 
-	_, err = p.db.Exec(query, args...)
+	stmt := p.ins.SetMap(clauses)
+	err := p.db.Exec(stmt)
 
 	return err
 }
 
-func (p passwords) MaxId() (uint64, error) {
-	query, args := sq.Select("max(id)").From(passwordTable).PlaceholderFormat(sq.Dollar).MustSql()
+func (p passwords) MaxId() (*uint64, error) {
+	stmt := sq.Select("max(id)").From(passwordTable)
 
 	var result *uint64
-	err := p.db.Get(&result, query, args...)
+	err := p.db.Get(&result, stmt)
 	if err == sql.ErrNoRows {
-		return 0, nil
+		return nil, nil
 	}
 
-	return *result, err
+	return result, errors.Wrap(err, "failed to get max id from tests")
 }
 
 func (p passwords) Pagination(pagination database.Pagination) database.Passwords {

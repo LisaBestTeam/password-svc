@@ -12,7 +12,7 @@ var migrations = &migrate.PackrMigrationSource{
 }
 
 func MigrateUp(cfg config.Config) error {
-	applied, err := migrate.Exec(cfg.Database().DB, "postgres", migrations, migrate.Up)
+	applied, err := migrate.Exec(cfg.RawDB(), "postgres", migrations, migrate.Up)
 	if err != nil {
 		return errors.Wrap(err, "failed to apply migrations")
 	}
@@ -21,7 +21,7 @@ func MigrateUp(cfg config.Config) error {
 }
 
 func MigrateDown(cfg config.Config) error {
-	applied, err := migrate.Exec(cfg.Database().DB, "postgres", migrations, migrate.Down)
+	applied, err := migrate.Exec(cfg.RawDB(), "postgres", migrations, migrate.Down)
 	if err != nil {
 		return errors.Wrap(err, "failed to apply migrations")
 	}

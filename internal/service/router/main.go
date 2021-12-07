@@ -10,21 +10,24 @@ import (
 	"github.com/lisabestteam/password-svc/internal/database"
 	"github.com/lisabestteam/password-svc/internal/database/postgres"
 	"github.com/lisabestteam/password-svc/internal/service"
-	"github.com/sirupsen/logrus"
+	"gitlab.com/distributed_lab/kit/copus/types"
+	"gitlab.com/distributed_lab/logan/v3"
 )
 
 func NewServer(cfg config.Config) service.Service {
 	return &server{
-		passwords: postgres.NewPassword(cfg.Database()),
+		passwords: postgres.NewPassword(cfg.DB()),
 		log:       cfg.Log(),
 		listener:  cfg.Listener(),
+		copus:     cfg.Copus(),
 	}
 }
 
 type server struct {
 	passwords database.Passwords
-	log       *logrus.Logger
+	log       *logan.Entry
 	listener  net.Listener
+	copus     types.Copus
 }
 
 func (r server) Run(ctx context.Context, group *sync.WaitGroup) {
@@ -33,6 +36,10 @@ func (r server) Run(ctx context.Context, group *sync.WaitGroup) {
 	log := r.log.WithField("service", "server")
 
 	router := r.NewRouter()
+
+	if err := r.copus.RegisterChi(router); err != nil {
+		panic(err)
+	}
 
 	log.Info("Router init")
 

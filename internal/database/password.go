@@ -8,7 +8,7 @@ type Passwords interface {
 
 	CreatePassword(password Password) error
 
-	MaxId() (uint64, error)
+	MaxId() (*uint64, error)
 
 	Pagination(pagination Pagination) Passwords
 }

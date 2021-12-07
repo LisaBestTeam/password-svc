@@ -10,13 +10,12 @@ import (
 	"github.com/lisabestteam/password-svc/internal/service/listen"
 	"github.com/lisabestteam/password-svc/internal/service/router"
 	"github.com/sirupsen/logrus"
+	"gitlab.com/distributed_lab/kit/kv"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
 	application = kingpin.New("password", "a command line")
-
-	configPath = application.Flag("config", "path to config file").Required().ExistingFile()
 
 	migration     = application.Command("migrate", "migrate command")
 	migrationUp   = migration.Command("up", "apply migrations")
@@ -37,11 +36,9 @@ func Run(args []string) bool {
 
 	cmd := kingpin.MustParse(application.Parse(args[1:]))
 
-	cfg := config.NewConfig(config.MustGetter(*configPath))
+	cfg := config.NewConfig(kv.MustFromEnv())
 	ctx := context.Background()
 	log := cfg.Log()
-
-	defer cfg.Database().Close()
 
 	switch cmd {
 	case migrationUp.FullCommand():

@@ -6,20 +6,20 @@ import (
 	"github.com/lisabestteam/password-svc/internal/database/postgres"
 	"github.com/lisabestteam/password-svc/internal/horizon"
 	"github.com/lisabestteam/password-svc/internal/service"
-	"github.com/sirupsen/logrus"
+	"gitlab.com/distributed_lab/logan/v3"
 )
 
 type listen struct {
 	passwords database.Passwords
 	client    horizon.HorizonClient
-	log       *logrus.Logger
+	log       *logan.Entry
 	channel   chan<- database.Password
 }
 
 func NewListen(cfg config.Config, channel chan<- database.Password) service.Service {
 	return &listen{
-		passwords: postgres.NewPassword(cfg.Database()),
-		client:    cfg.Horizon(),
+		passwords: postgres.NewPassword(cfg.DB()),
+		client:    horizon.NewHorizonClient("http://horizon"),
 		log:       cfg.Log(),
 		channel:   channel,
 	}

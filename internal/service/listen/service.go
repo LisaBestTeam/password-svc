@@ -29,7 +29,7 @@ func (l listen) Run(ctx context.Context, group *sync.WaitGroup) {
 
 	links := value{
 		Type:   strprt("1"),
-		Cursor: &maxId,
+		Cursor: maxId,
 	}.Encode()
 
 	for ; ; <-ticker.C {

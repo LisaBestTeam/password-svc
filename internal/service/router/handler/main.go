@@ -2,17 +2,17 @@ package handler
 
 import (
 	"encoding/json"
+	"gitlab.com/distributed_lab/logan/v3"
 
 	"github.com/lisabestteam/password-svc/internal/database"
-	"github.com/sirupsen/logrus"
 )
 
 type PasswordHandler struct {
 	passwords database.Passwords
-	log       *logrus.Logger
+	log       *logan.Entry
 }
 
-func NewPasswordHandler(password database.Passwords, logger *logrus.Logger) PasswordHandler {
+func NewPasswordHandler(password database.Passwords, logger *logan.Entry) PasswordHandler {
 	return PasswordHandler{passwords: password, log: logger}
 }
 

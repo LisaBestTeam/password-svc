@@ -15,6 +15,11 @@ github.com/davecgh/go-spew/spew
 github.com/fatih/structs
 # github.com/fsnotify/fsnotify v1.5.1
 github.com/fsnotify/fsnotify
+# github.com/getsentry/sentry-go v0.7.0
+github.com/getsentry/sentry-go
+# github.com/go-chi/chi v4.1.2+incompatible
+## explicit
+github.com/go-chi/chi
 # github.com/go-chi/chi/v5 v5.0.4
 ## explicit
 github.com/go-chi/chi/v5
@@ -58,7 +63,7 @@ github.com/jmoiron/sqlx
 github.com/jmoiron/sqlx/reflectx
 # github.com/karrick/godirwalk v1.15.8
 github.com/karrick/godirwalk
-# github.com/konsorten/go-windows-terminal-sequences v1.0.2
+# github.com/konsorten/go-windows-terminal-sequences v1.0.3
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
 github.com/lann/builder
@@ -79,6 +84,9 @@ github.com/markbates/oncer
 github.com/markbates/safe
 # github.com/mitchellh/mapstructure v1.4.2
 github.com/mitchellh/mapstructure
+# github.com/nullstyle/go-xdr v0.0.0-20180726165426-f4c839f75077
+## explicit
+github.com/nullstyle/go-xdr/xdr3
 # github.com/pelletier/go-toml v1.9.4
 github.com/pelletier/go-toml
 # github.com/pkg/errors v0.8.1
@@ -90,7 +98,7 @@ github.com/pmezard/go-difflib/difflib
 ## explicit
 github.com/rubenv/sql-migrate
 github.com/rubenv/sql-migrate/sqlparse
-# github.com/sirupsen/logrus v1.4.2
+# github.com/sirupsen/logrus v1.6.0
 ## explicit
 github.com/sirupsen/logrus
 # github.com/spf13/afero v1.6.0
@@ -116,7 +124,51 @@ github.com/spf13/viper/internal/encoding/yaml
 github.com/stretchr/testify/assert
 # github.com/subosito/gotenv v1.2.0
 github.com/subosito/gotenv
+# github.com/xr9kayu/logrus v0.7.2
+github.com/xr9kayu/logrus/sentry
+# gitlab.com/distributed_lab/figure v2.1.0+incompatible
+gitlab.com/distributed_lab/figure
+# gitlab.com/distributed_lab/kit v1.8.6
+## explicit
+gitlab.com/distributed_lab/kit/comfig
+gitlab.com/distributed_lab/kit/copus
+gitlab.com/distributed_lab/kit/copus/cop
+gitlab.com/distributed_lab/kit/copus/janus
+gitlab.com/distributed_lab/kit/copus/types
+gitlab.com/distributed_lab/kit/janus
+gitlab.com/distributed_lab/kit/janus/internal
+gitlab.com/distributed_lab/kit/kv
+gitlab.com/distributed_lab/kit/pgdb
+# gitlab.com/distributed_lab/logan v3.7.2+incompatible
+gitlab.com/distributed_lab/logan/v3
+gitlab.com/distributed_lab/logan/v3/errors
+gitlab.com/distributed_lab/logan/v3/fields
+# gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c
+gitlab.com/distributed_lab/running
+# gitlab.com/tokend/connectors v0.1.8
+## explicit
+gitlab.com/tokend/connectors/keyer
+gitlab.com/tokend/connectors/signed
+# gitlab.com/tokend/go v3.15.0+incompatible
+## explicit
+gitlab.com/tokend/go/crc16
+gitlab.com/tokend/go/hash
+gitlab.com/tokend/go/keypair
+gitlab.com/tokend/go/network
+gitlab.com/tokend/go/signcontrol
+gitlab.com/tokend/go/signcontrol/internal/httpsignatures
+gitlab.com/tokend/go/strkey
+gitlab.com/tokend/go/xdr
+# gitlab.com/tokend/keypair v0.0.0-20190412110653-b9d7e0c8b312
+## explicit
+gitlab.com/tokend/keypair
+gitlab.com/tokend/keypair/figurekeypair
+gitlab.com/tokend/keypair/internal
+gitlab.com/tokend/keypair/internal/crc16
+gitlab.com/tokend/keypair/internal/strkey
 # golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/ed25519/internal/edwards25519
 golang.org/x/crypto/ssh/terminal
 # golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf
 golang.org/x/sys/internal/unsafeheader
