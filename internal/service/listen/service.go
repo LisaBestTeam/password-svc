@@ -13,7 +13,6 @@ import (
 
 func (l listen) Run(ctx context.Context, group *sync.WaitGroup) {
 	defer group.Done()
-	defer close(l.channel)
 
 	log := l.log.WithField("service", "listener")
 
@@ -52,12 +51,13 @@ func (l listen) Run(ctx context.Context, group *sync.WaitGroup) {
 			}
 			password.Id = cast.ToUint64(data.Id)
 
-			l.channel <- password
+			if err = l.db.CreatePassword(password); err != nil {
+				log.WithError(err).Error("failed to create password in database")
+			}
 		}
 
 		links = list.Links.Next
 	}
-
 }
 
 func strprt(string2 string) *string {
@@ -95,5 +95,5 @@ func (v value) Encode() string {
 		values.Add("page[cursor]", cast.ToString(v.Cursor))
 	}
 
-	return values.Encode()
+	return "/v3/data?" + values.Encode()
 }

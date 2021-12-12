@@ -13,14 +13,14 @@ type listen struct {
 	passwords database.Passwords
 	client    horizon.HorizonClient
 	log       *logan.Entry
-	channel   chan<- database.Password
+	db        database.Passwords
 }
 
-func NewListen(cfg config.Config, channel chan<- database.Password) service.Service {
+func NewListen(cfg config.Config) service.Service {
 	return &listen{
 		passwords: postgres.NewPassword(cfg.DB()),
 		client:    horizon.NewHorizonClient("http://horizon"),
 		log:       cfg.Log(),
-		channel:   channel,
+		db:        postgres.NewPassword(cfg.DB()),
 	}
 }

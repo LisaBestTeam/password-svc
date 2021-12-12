@@ -21,7 +21,7 @@ type horizon struct {
 }
 
 func (h *horizon) get(dest interface{}, values string) error {
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/v3/data?%s", h.endpoint, values), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", h.endpoint, values), nil)
 	if err != nil {
 		return err
 	}
